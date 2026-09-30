@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Eco-Transit Crew | MNSU CampusEco</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <h1>MNSU CampusEco</h1>
+        <p>Eco-Transit Crew Portal</p>
+    </header>
+
+    <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="operator.html">Central Hub</a>
+        <a href="driver.html">Eco-Transit Crew</a>
+        <a href="recipient.html">Package Tracking</a>
+    </nav>
+
+    <main>
+
+        <section class="dashboard-grid">
+
+            <div class="dashboard-card">
+                <h3>Assigned Vehicle</h3>
+                <p class="big-number">EcoCart 04</p>
+                <p>Electric Campus Delivery Vehicle</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Battery Status</h3>
+                <p class="big-number">82%</p>
+                <p>Vehicle ready for delivery</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Deliveries</h3>
+                <p class="big-number">6</p>
+                <p>Packages currently assigned</p>
+            </div>
+
+        </section>
+
+
+        <section class="table-section">
+
+            <h2>Today's Delivery Route</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Package</th>
+                        <th>Destination</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>PKG10234</td>
+                        <td>Julia Sears</td>
+                        <td>Normal</td>
+                        <td>Loaded</td>
+                    </tr>
+
+                    <tr>
+                        <td>PKG39281</td>
+                        <td>Centennial Student Union</td>
+                        <td>Urgent</td>
+                        <td>En Route</td>
+                    </tr>
+
+                    <tr>
+                        <td>PKG57321</td>
+                        <td>Memorial Library</td>
+                        <td>Normal</td>
+                        <td>Pending</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            <button type="button">
+                Claim Next Delivery
+            </button>
+
+        </section>
+
+
+        <section class="form-card driver-form">
+
+            <h2>Vehicle Battery Report</h2>
+
+            <form>
+
+                <label for="vehicle">
+                    Vehicle
+                </label>
+
+                <select id="vehicle" name="vehicle" required>
+
+                    <option value="">
+                        Select Vehicle
+                    </option>
+
+                    <option value="cart04">
+                        EcoCart 04
+                    </option>
+
+                    <option value="cart07">
+                        EcoCart 07
+                    </option>
+
+                    <option value="cart11">
+                        EcoCart 11
+                    </option>
+
+                </select>
+
+
+                <label for="battery">
+                    Current Battery Level (%)
+                </label>
+
+                <input
+                    type="number"
+                    id="battery"
+                    name="battery"
+                    min="0"
+                    max="100"
+                    required
+                >
+
+
+                <label for="vehicle-status">
+                    Vehicle Status
+                </label>
+
+                <select
+                    id="vehicle-status"
+                    name="vehicle-status"
+                    required
+                >
+
+                    <option value="">
+                        Select Status
+                    </option>
+
+                    <option value="available">
+                        Available
+                    </option>
+
+                    <option value="delivery">
+                        On Delivery
+                    </option>
+
+                    <option value="charging">
+                        Charging
+                    </option>
+
+                    <option value="maintenance">
+                        Needs Maintenance
+                    </option>
+
+                </select>
+
+
+                <button type="submit">
+                    Submit Battery Report
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>MNSU CampusEco | Eco-Transit Crew</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Package Tracking | MNSU CampusEco</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header class="main-header">
+        <h1>MNSU CampusEco</h1>
+        <p>Campus Package Tracking</p>
+    </header>
+
+    <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="operator.html">Central Hub</a>
+        <a href="driver.html">Eco-Transit Crew</a>
+        <a href="recipient.html">Package Tracking</a>
+    </nav>
+
+    <main>
+
+        <section class="form-card">
+
+            <h2>Track Your Package</h2>
+
+            <p>
+                Enter your tracking number to view your
+                campus delivery information.
+            </p>
+
+            <form>
+
+                <label for="tracking-number">
+                    Tracking Number
+                </label>
+
+                <input
+                    type="text"
+                    id="tracking-number"
+                    name="tracking-number"
+                    pattern="[A-Za-z0-9]{8,20}"
+                    required
+                >
+
+                <button type="submit">
+                    Track Package
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <section class="tracking-card">
+
+            <h2>Package Status</h2>
+
+            <p>
+                <strong>Tracking:</strong>
+                PKG10234
+            </p>
+
+            <p>
+                <strong>Destination:</strong>
+                Julia Sears Residence Community
+            </p>
+
+            <div class="tracking-steps">
+
+                <div class="tracking-step">
+                    <span>1</span>
+                    <h4>Received</h4>
+                    <p>Central Hub</p>
+                </div>
+
+                <div class="tracking-step">
+                    <span>2</span>
+                    <h4>Loaded</h4>
+                    <p>EcoCart 04</p>
+                </div>
+
+                <div class="tracking-step">
+                    <span>3</span>
+                    <h4>En Route</h4>
+                    <p>Campus Delivery</p>
+                </div>
+
+                <div class="tracking-step">
+                    <span>4</span>
+                    <h4>Delivered</h4>
+                    <p>Final Destination</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="form-card preference-card">
+
+            <h2>Delivery Preferences</h2>
+
+            <form>
+
+                <label for="delivery-location">
+                    Preferred Delivery Location
+                </label>
+
+                <select
+                    id="delivery-location"
+                    name="delivery-location"
+                    required
+                >
+
+                    <option value="">
+                        Select Location
+                    </option>
+
+                    <option value="residence">
+                        Residence Hall
+                    </option>
+
+                    <option value="locker">
+                        Campus Locker
+                    </option>
+
+                    <option value="department">
+                        Department Office
+                    </option>
+
+                </select>
+
+
+                <label class="checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        name="email-notifications"
+                    >
+
+                    Receive Email Notifications
+
+                </label>
+
+
+                <label class="checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        name="delivery-notifications"
+                    >
+
+                    Notify Me When Delivered
+
+                </label>
+
+
+                <button type="submit">
+                    Save Preferences
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <section class="eco-section">
+
+            <h2>Your Environmental Impact</h2>
+
+            <div class="dashboard-grid">
+
+                <div class="dashboard-card">
+                    <h3>CO₂ Saved</h3>
+                    <p class="big-number">2.4 lbs</p>
+                    <p>Compared with individual delivery</p>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3>Electric Delivery</h3>
+                    <p class="big-number">3.2 mi</p>
+                    <p>Low-emission transportation</p>
+                </div>
+
+                <div class="dashboard-card">
+                    <h3>Eco Deliveries</h3>
+                    <p class="big-number">8</p>
+                    <p>Your total CampusEco deliveries</p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>
+            MNSU CampusEco | Package Tracking
+        </p>
+    </footer>
+
+</body>
+</html>
