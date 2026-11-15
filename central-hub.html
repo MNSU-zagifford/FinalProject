@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Central Hub | MNSU CampusEco</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <header class="main-header">
+            <h1>MNSU CampusEco</h1>
+            <p>Central Hub Personnel Portal</p>
+        </header>
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="central-hub.html" aria-current="page">Central Hub</a>
+            <a href="campus-eco.html">Eco-Transit Crew</a>
+            <a href="campus-endusers.html">Package Tracking</a>
+        </nav>
+        <main>
+            <section class="dashboard-grid" id="hub-stats">
+                <div class="dashboard-card">
+                    <h3>Total Packages</h3>
+                    <p class="big-number" id="total-packages">0</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>In Transit</h3>
+                    <p class="big-number" id="transit-packages">0</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Delivered</h3>
+                    <p class="big-number" id="delivered-packages">0</p>
+                </div>
+            </section>
+            <section class="form-card">
+                <h2>Register Incoming Package</h2>
+                <form id="register-form">
+                    <label for="new-tracking">Tracking Number</label>
+                    <input id="new-tracking" name="tracking" required pattern="[A-Za-z0-9]{8,20}" placeholder="PKG12345">
+                    <label for="new-destination">Campus Destination</label><input id="new-destination" name="destination" required maxlength="120" placeholder="Memorial Library">
+                    <label for="new-size">Package Size</label>
+                    <select id="new-size" name="size">
+                        <option>Small</option>
+                        <option selected>Medium</option>
+                        <option>Large</option>
+                    </select>
+                    <label for="new-weight">Weight (lbs)</label>
+                    <input id="new-weight" name="weight" type="number" min="0.1" max="100" step="0.1" required>
+                    <label for="new-priority">Priority</label>
+                    <select id="new-priority" name="priority">
+                        <option>Normal</option>
+                        <option>Urgent</option>
+                    </select>
+                    <button type="submit">Register Package</button>
+                </form>
+            </section>
+            <section class="table-section">
+                <h2>Package Management</h2>
+                <label for="package-search">Search packages</label>
+                <input id="package-search" type="search" placeholder="Tracking or destination">
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tracking</th>
+                                <th>Destination</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Update Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hub-rows">
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="table-section">
+                <h2>Recent Delivery Events</h2>
+                <ul id="event-list" class="event-list"></ul>
+            </section>
+            <p id="hub-message" class="notice" role="status" aria-live="polite">
+
+            </p>
+            <section class="form-card angular-panel" ng-app="campusEcoLive" ng-controller="LiveController">
+                <h2>Live Dispatch Notes (AngularJS)</h2>
+                <label for="dispatch-note">Dispatch note</label>
+                <input id="dispatch-note" ng-model="note" placeholder="Enter dispatch note">
+                <p>Live preview: <strong ng-bind="note || 'No note entered'"></strong>
+                </p>
+                <label for="dispatch-filter">Display preference</label>
+                <select id="dispatch-filter" ng-model="view">
+                    <option value="all">All deliveries</option>
+                    <option value="active">Active deliveries</option>
+                </select>
+                <p ng-bind="view === 'active' ? 'Showing active delivery preference' : 'Showing all delivery preference'"></p>
+            </section>
+        </main>
+        <footer>
+            <p>MNSU CampusEco | Sustainable Campus Logistics</p>
+        </footer>
+    </body>
+    </html>
