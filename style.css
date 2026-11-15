@@ -324,3 +324,63 @@ footer {
         padding: 20px 18px;
     }
 }
+
+/* Phase 2 responsive layout and interactive states */
+.dashboard-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
+.table-scroll,.table-section {overflow-x:auto;}
+.table-section table {width:100%;min-width:550px;border-collapse:collapse;}
+.status-tag {display:inline-block;padding:5px 9px;border-radius:20px;background:#e0f3e8;color:#145d38;font-weight:700;}
+.status-select {max-width:155px;}
+.small-button {padding:6px 9px;margin:4px;font-size:.85rem;}
+.notice {min-height:1.5rem;font-weight:600;color:#17643e;}
+.notice.error {color:#a32323;}
+.step-complete {background:#e5f5eb;border-radius:10px;}
+.event-list {padding-left:22px;line-height:1.8;}
+.angular-panel {margin-top:24px;}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible {outline:3px solid #247db8;outline-offset:2px;}
+@media(max-width:850px){.dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:600px){.dashboard-grid{grid-template-columns:1fr;}.tracking-steps{display:flex;flex-direction:column;gap:10px;}.navbar{flex-wrap:wrap;}main{width:calc(100% - 24px);}input,select{max-width:100%;}}
+
+/* Phase 2/3 visual refresh: consistent portal styling and mobile accessibility */
+:root { --shadow: 0 10px 28px rgba(18,61,47,.09); }
+body { min-height:100vh; background:radial-gradient(circle at 85% 0%,#dcefe2 0%,transparent 36%),linear-gradient(180deg,#f4faf6,#edf4ef); }
+.main-header { position:relative; overflow:hidden; }
+.main-header::after { content:"";position:absolute;right:-70px;top:-120px;width:320px;height:320px;border:1px solid rgba(255,255,255,.15);border-radius:50%;pointer-events:none; }
+.navbar { position:relative;z-index:1; }
+.navbar a[aria-current="page"] { background:var(--primary-dark);color:white; }
+.portal-card,.dashboard-card,.form-card,.tracking-card,.table-section,.eco-section { transition:box-shadow .2s ease,transform .2s ease; }
+.portal-card:hover,.dashboard-card:hover { transform:translateY(-3px);box-shadow:0 16px 36px rgba(18,61,47,.14); }
+.portal-card { display:flex;flex-direction:column;align-items:flex-start; }
+.portal-card .button-link { margin-top:auto; }
+.dashboard-card { border-top:4px solid var(--primary); }
+.dashboard-card .big-number,.dashboard-card .big-number span { color:var(--primary-dark); }
+.form-card,.tracking-card,.eco-section { margin-top:26px; }
+.form-card form { max-width:760px; }
+input,select,textarea { border-radius:10px; transition:border-color .2s ease,box-shadow .2s ease; }
+input:focus,select:focus,textarea:focus { border-color:var(--primary);box-shadow:0 0 0 3px rgba(31,122,92,.13); }
+button,.button-link { min-height:42px; }
+button:disabled { opacity:.55;cursor:not-allowed;transform:none; }
+.table-section th { background:#e7f3eb;color:var(--primary-dark);font-size:.88rem;text-align:left;white-space:nowrap; }
+.table-section td,.table-section th { padding:12px 14px;border-bottom:1px solid var(--border); }
+.table-section tbody tr:nth-child(even) { background:#f8fbf9; }
+.table-section tbody tr:hover { background:#eaf6ee; }
+.table-section tbody tr:last-child td { border-bottom:0; }
+.status-tag { white-space:nowrap; }
+.event-list li { padding:6px 0;border-bottom:1px solid var(--border); }
+.tracking-step { position:relative; }
+.tracking-step.step-complete { border-color:#9dd2af; }
+.notice:not(:empty) { padding:8px 0; }
+@media (max-width:850px) { .portal-container { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:600px) {
+  header.main-header { padding:30px 16px 24px; }
+  .main-header p { letter-spacing:.06em; }
+  .navbar { gap:7px;padding:12px; }
+  .navbar a { flex:1 1 calc(50% - 8px);font-size:.9rem;padding:10px 8px; }
+  .portal-container { grid-template-columns:1fr; }
+  .portal-card,.dashboard-card,.form-card,.tracking-card,.table-section,.eco-section { padding:19px 16px; }
+  .table-section { margin-left:0;margin-right:0; }
+  .table-section table { min-width:560px; }
+  input,select,textarea,button { font-size:16px; }
+  .hero { margin-top:16px; }
+}
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important;transition:none!important;animation:none!important; } }
