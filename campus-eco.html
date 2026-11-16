@@ -1,179 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Eco-Transit Crew | MNSU CampusEco</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Eco-Transit Crew | MNSU CampusEco</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <header class="main-header">
-        <h1>MNSU CampusEco</h1>
-        <p>Eco-Transit Crew Portal</p>
-    </header>
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="logo-icon">C</div>
+    <div>
+      <h1>CampusEco</h1>
+      <span>Eco-Transit Driver Portal</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="live-dot"></span> ON DUTY
+    <span id="live-clock">--:--:--</span>
+  </div>
+</header>
 
-    <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="central-hub.html">Central Hub</a>
-        <a href="campus-eco.html">Eco-Transit Crew</a>
-        <a href="campus-endusers.html">Package Tracking</a>
-    </nav>
+<nav class="navbar">
+  <a href="index.html">🏠 Home</a>
+  <a href="central-hub.html">🏭 Central Hub</a>
+  <a href="campus-eco.html" aria-current="page">🛺 Eco-Transit</a>
+  <a href="campus-endusers.html">📦 Package Tracking</a>
+</nav>
 
-    <main>
+<div class="page-wrapper">
 
-        <section class="dashboard-grid">
+  <div>
+    <p class="page-title">Eco-Transit Driver Dashboard</p>
+    <p class="page-subtitle">Your vehicle telemetry, assigned deliveries, and route queue — updated live.</p>
+  </div>
 
-            <div class="dashboard-card">
-                <h3>Assigned Vehicle</h3>
-                <p class="big-number" id="assigned-vehicle">EcoCart 04</p>
-                <p>Electric Campus Delivery Vehicle</p>
-            </div>
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">🛺 Assigned Vehicle</div>
+      <div class="kpi-value" id="assigned-vehicle" style="font-size:1.3rem;">EcoCart 04</div>
+      <div class="kpi-sub">Electric Campus Cart</div>
+    </div>
+    <div class="kpi-card" id="battery-card">
+      <div class="kpi-label">🔋 Battery Level</div>
+      <div class="kpi-value" id="battery-display">82%</div>
+      <div class="battery-bar-wrap">
+        <div class="battery-bar-track"><div class="battery-bar-fill" id="battery-bar" style="width:82%"></div></div>
+        <div class="battery-pct" id="battery-status-text">Vehicle ready for delivery</div>
+      </div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">📦 Assigned Packages</div>
+      <div class="kpi-value" id="delivery-count">0</div>
+      <div class="kpi-sub">Packages in your queue</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">📍 Speed</div>
+      <div class="kpi-value">9.2</div>
+      <div class="kpi-sub">mph — governed</div>
+    </div>
+  </div>
 
-            <div class="dashboard-card">
-                <h3>Battery Status</h3>
-                <p class="big-number" id="battery-display">82%</p>
-                <p>Vehicle ready for delivery</p>
-            </div>
+  <!-- DELIVERY ROUTE -->
+  <div class="card">
+    <div class="section-header">
+      <h2><span class="card-icon">🗺️</span> Today's Delivery Route</h2>
+      <button type="button" id="claim-delivery" class="btn btn-gold">⚡ Claim Next Delivery</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Package</th>
+            <th>Destination</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="route-rows"></tbody>
+      </table>
+    </div>
+    <p id="crew-message" class="notice" role="status" aria-live="polite"></p>
+  </div>
 
-            <div class="dashboard-card">
-                <h3>Deliveries</h3>
-                <p class="big-number" id="delivery-count">6</p>
-                <p>Packages currently assigned</p>
-            </div>
+  <!-- BATTERY REPORT -->
+  <div class="card">
+    <h2><span class="card-icon">🔋</span> Vehicle Battery Report</h2>
+    <form id="battery-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="vehicle">Select Vehicle</label>
+          <select id="vehicle" name="vehicle" required>
+            <option value="">— Select —</option>
+            <option value="cart04">EcoCart 04</option>
+            <option value="cart07">EcoCart 07</option>
+            <option value="cart11">EcoCart 11</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="battery">Battery Level (%)</label>
+          <input type="number" id="battery" name="battery" min="0" max="100" required placeholder="e.g. 75">
+        </div>
+        <div class="form-group">
+          <label for="vehicle-status">Vehicle Status</label>
+          <select id="vehicle-status" name="vehicle-status" required>
+            <option value="">— Select —</option>
+            <option value="Available">Available</option>
+            <option value="On Delivery">On Delivery</option>
+            <option value="Charging">Charging</option>
+            <option value="Maintenance">Needs Maintenance</option>
+          </select>
+        </div>
+        <div class="form-group" style="justify-content:flex-end;">
+          <label>&nbsp;</label>
+          <button type="submit" class="btn btn-primary">📤 Submit Report</button>
+        </div>
+      </div>
+    </form>
+  </div>
 
-        </section>
+  <!-- TELEMETRY -->
+  <div class="card">
+    <h2><span class="card-icon">📡</span> Live GPS Telemetry</h2>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">📍 Latitude</div>
+        <div class="kpi-value" style="font-size:1.1rem;">44.1472°N</div>
+        <div class="kpi-sub">MNSU Mankato Campus</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">📍 Longitude</div>
+        <div class="kpi-value" style="font-size:1.1rem;">93.9989°W</div>
+        <div class="kpi-sub">Ellis Ave Corridor</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">🌿 CO₂ Saved</div>
+        <div class="kpi-value">2.4</div>
+        <div class="kpi-sub">lbs vs diesel truck</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">🛣️ Range Left</div>
+        <div class="kpi-value">31</div>
+        <div class="kpi-sub">miles on current charge</div>
+      </div>
+    </div>
+  </div>
 
+</div>
 
-        <section class="table-section">
+<footer>
+  <strong>MNSU CampusEco</strong> &nbsp;|&nbsp; Eco-Transit Crew Portal &nbsp;|&nbsp; CIS 483 / CIS 583
+</footer>
 
-            <h2>Today's Delivery Route</h2>
+<div id="toast-container"></div>
 
-            <table>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="app.js"></script>
+<script>
+  function updateClock() {
+    document.getElementById('live-clock').textContent = new Date().toLocaleTimeString();
+  }
+  setInterval(updateClock, 1000); updateClock();
 
-                <thead>
-                    <tr>
-                        <th>Package</th>
-                        <th>Destination</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody id="route-rows">
-                </tbody>
-
-            </table>
-
-            <button type="button" id="claim-delivery" class="button-link">
-                Claim Next Delivery
-            </button>
-
-            <p id="crew-message" class="notice" role="status" aria-live="polite"></p>
-
-        </section>
-
-
-        <section class="form-card driver-form">
-
-            <h2>Vehicle Battery Report</h2>
-
-            <form id="battery-form">
-
-                <label for="vehicle">
-                    Vehicle
-                </label>
-
-                <select id="vehicle" name="vehicle" required>
-
-                    <option value="">
-                        Select Vehicle
-                    </option>
-
-                    <option value="cart04">
-                        EcoCart 04
-                    </option>
-
-                    <option value="cart07">
-                        EcoCart 07
-                    </option>
-
-                    <option value="cart11">
-                        EcoCart 11
-                    </option>
-
-                </select>
-
-
-                <label for="battery">
-                    Current Battery Level (%)
-                </label>
-
-                <input
-                    type="number"
-                    id="battery"
-                    name="battery"
-                    min="0"
-                    max="100"
-                    required
-                >
-
-
-                <label for="vehicle-status">
-                    Vehicle Status
-                </label>
-
-                <select
-                    id="vehicle-status"
-                    name="vehicle-status"
-                    required
-                >
-
-                    <option value="">
-                        Select Status
-                    </option>
-
-                    <option value="available">
-                        Available
-                    </option>
-
-                    <option value="delivery">
-                        On Delivery
-                    </option>
-
-                    <option value="charging">
-                        Charging
-                    </option>
-
-                    <option value="maintenance">
-                        Needs Maintenance
-                    </option>
-
-                </select>
-
-
-                <button type="submit">
-                    Submit Battery Report
-                </button>
-
-            </form>
-
-        </section>
-
-    </main>
-
-
-    <footer>
-        <p>MNSU CampusEco | Eco-Transit Crew</p>
-    </footer>
-
-    <!-- Phase 2: jQuery Library & Client-Side Application Script -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="app.js"></script>
-
+  window.showToast = function(msg, type='success') {
+    const t = document.createElement('div');
+    t.className = 'toast ' + type;
+    t.innerHTML = (type==='success'?'✅':type==='error'?'❌':'⚠️') + ' ' + msg;
+    document.getElementById('toast-container').appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+  };
+</script>
 </body>
 </html>

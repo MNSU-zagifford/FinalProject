@@ -1,116 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>Central Hub | MNSU CampusEco</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <header class="main-header">
-            <h1>MNSU CampusEco</h1>
-            <p>Central Hub Personnel Portal</p>
-        </header>
-        <nav class="navbar">
-            <a href="index.html">Home</a>
-            <a href="central-hub.html" aria-current="page">Central Hub</a>
-            <a href="campus-eco.html">Eco-Transit Crew</a>
-            <a href="campus-endusers.html">Package Tracking</a>
-        </nav>
-        <main>
-            <section class="dashboard-grid" id="hub-stats">
-                <div class="dashboard-card">
-                    <h3>Total Packages</h3>
-                    <p class="big-number" id="total-packages">0</p>
-                </div>
-                <div class="dashboard-card">
-                    <h3>In Transit</h3>
-                    <p class="big-number" id="transit-packages">0</p>
-                </div>
-                <div class="dashboard-card">
-                    <h3>Delivered</h3>
-                    <p class="big-number" id="delivered-packages">0</p>
-                </div>
-            </section>
-            <section class="form-card">
-                <h2>Register Incoming Package</h2>
-                <form id="register-form">
-                    <label for="new-tracking">Tracking Number</label>
-                    <input id="new-tracking" name="tracking" required pattern="[A-Za-z0-9]{8,20}" placeholder="PKG12345">
-                    <label for="new-destination">Campus Destination</label><input id="new-destination" name="destination" required maxlength="120" placeholder="Memorial Library">
-                    <label for="new-size">Package Size</label>
-                    <select id="new-size" name="size">
-                        <option>Small</option>
-                        <option selected>Medium</option>
-                        <option>Large</option>
-                    </select>
-                    <label for="new-weight">Weight (lbs)</label>
-                    <input id="new-weight" name="weight" type="number" min="0.1" max="100" step="0.1" required>
-                    <label for="new-priority">Priority</label>
-                    <select id="new-priority" name="priority">
-                        <option>Normal</option>
-                        <option>Urgent</option>
-                    </select>
-                    <button type="submit">Register Package</button>
-                </form>
-            </section>
-            <section class="table-section">
-                <h2>Package Management</h2>
-                <label for="package-search">Search packages</label>
-                <input id="package-search" type="search" placeholder="Tracking or destination">
-                <div class="table-scroll">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Tracking</th>
-                                <th>Destination</th>
-                                <th>Priority</th>
-                                <th>Status</th>
-                                <th>Update Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="hub-rows">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Central Hub | MNSU CampusEco</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-            <section class="table-section">
-                <h2>Recent Delivery Events</h2>
-                <ul id="event-list" class="event-list"></ul>
-            </section>
-            <p id="hub-message" class="notice" role="status" aria-live="polite">
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="logo-icon">C</div>
+    <div>
+      <h1>CampusEco</h1>
+      <span>Central Hub Operator Portal</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="live-dot"></span> LIVE
+    <span id="live-clock">--:--:--</span>
+  </div>
+</header>
 
-            </p>
-            <section class="form-card angular-panel" ng-app="campusEcoLive" ng-controller="LiveController">
-                <h2>Live Courier Dispatch Broadcast (AngularJS)</h2>
-                <label for="dispatch-note">Courier Broadcast Message (Two-Way Binding)</label>
-                <input id="dispatch-note" ng-model="note" placeholder="Enter dispatch note">
-                <p style="font-size: 0.85rem; color: #62576F; margin: 4px 0;">
-                    Characters remaining: <strong ng-bind="charsLeft()" ng-style="{color: charsLeft() < 20 ? '#d9534f' : '#22c55e'}"></strong>
-                </p>
-                <p>Live Preview: <strong style="color: #512888;" ng-bind="note || 'No broadcast note entered'"></strong></p>
-                <div style="margin: 10px 0; display: flex; flex-wrap: wrap; gap: 6px;">
-                    <button type="button" class="btn" style="padding: 4px 10px; font-size: 0.8rem;" ng-repeat="p in presets" ng-click="applyPreset(p)">
-                        Memo {{$index + 1}}
-                    </button>
-                    <button type="button" class="btn" style="padding: 4px 10px; font-size: 0.8rem; background: #62576F;" ng-click="clearNote()">Clear</button>
-                </div>
-                <label for="dispatch-filter">Display Route Preference</label>
-                <select id="dispatch-filter" ng-model="view">
-                    <option value="all">All Delivery Zones</option>
-                    <option value="active">Active Priority Routes</option>
-                </select>
-                <p ng-bind="view === 'active' ? 'Filtered: Active Priority Routes Only' : 'Filtered: All Campus Delivery Zones'"></p>
-            </section>
-        </main>
-        <footer>
-            <p>MNSU CampusEco | Sustainable Campus Logistics</p>
-        </footer>
-        <!-- Libraries & Scripts: jQuery, AngularJS (Phase 3 Data Binding), and Custom Modules -->
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-        <script src="live-dispatch.js"></script>
-        <script src="app.js"></script>
-    </body>
-    </html>
+<!-- NAV -->
+<nav class="navbar">
+  <a href="index.html">🏠 Home</a>
+  <a href="central-hub.html" aria-current="page">🏭 Central Hub</a>
+  <a href="campus-eco.html">🛺 Eco-Transit</a>
+  <a href="campus-endusers.html">📦 Package Tracking</a>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- PAGE HEADER -->
+  <div>
+    <p class="page-title">Central Hub Dashboard</p>
+    <p class="page-subtitle">Manage incoming packages, update statuses, and dispatch couriers in real time.</p>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid" id="hub-stats">
+    <div class="kpi-card">
+      <div class="kpi-label">📦 Total Packages</div>
+      <div class="kpi-value" id="total-packages">0</div>
+      <div class="kpi-sub">All registered today</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">🚚 In Transit</div>
+      <div class="kpi-value" id="transit-packages">0</div>
+      <div class="kpi-sub">Loaded or En Route</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">✅ Delivered</div>
+      <div class="kpi-value" id="delivered-packages">0</div>
+      <div class="kpi-sub">Completed deliveries</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">⏳ Pending</div>
+      <div class="kpi-value" id="pending-packages">0</div>
+      <div class="kpi-sub">Awaiting dispatch</div>
+    </div>
+  </div>
+
+  <!-- REGISTER FORM -->
+  <div class="card">
+    <h2><span class="card-icon">➕</span> Register Incoming Package</h2>
+    <form id="register-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="new-tracking">Tracking Number</label>
+          <input id="new-tracking" name="tracking" required pattern="[A-Za-z0-9]{5,20}" placeholder="e.g. PKG12345">
+        </div>
+        <div class="form-group">
+          <label for="new-destination">Campus Destination</label>
+          <input id="new-destination" name="destination" required maxlength="120" placeholder="e.g. Memorial Library">
+        </div>
+        <div class="form-group">
+          <label for="new-size">Package Size</label>
+          <select id="new-size" name="size">
+            <option>Small</option>
+            <option selected>Medium</option>
+            <option>Large</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="new-weight">Weight (lbs)</label>
+          <input id="new-weight" name="weight" type="number" min="0.1" max="100" step="0.1" required placeholder="e.g. 3.5">
+        </div>
+        <div class="form-group">
+          <label for="new-priority">Priority Level</label>
+          <select id="new-priority" name="priority">
+            <option>Normal</option>
+            <option>Urgent</option>
+          </select>
+        </div>
+        <div class="form-group" style="justify-content:flex-end;">
+          <label>&nbsp;</label>
+          <button type="submit" class="btn btn-primary">📥 Register Package</button>
+        </div>
+      </div>
+    </form>
+    <p id="hub-message" class="notice" role="status" aria-live="polite"></p>
+  </div>
+
+  <!-- PACKAGE TABLE -->
+  <div class="card">
+    <div class="section-header">
+      <h2><span class="card-icon">📋</span> Package Management</h2>
+    </div>
+    <div class="search-bar">
+      <input id="package-search" type="search" placeholder="Search by tracking number or destination…">
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tracking #</th>
+            <th>Destination</th>
+            <th>Size</th>
+            <th>Weight</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody id="hub-rows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- EVENTS FEED -->
+  <div class="card">
+    <h2><span class="card-icon">📡</span> Live Delivery Events</h2>
+    <ul class="event-feed" id="event-list"></ul>
+  </div>
+
+  <!-- ANGULARJS DISPATCH PANEL -->
+  <div class="dispatch-panel" ng-app="campusEcoLive" ng-controller="LiveController">
+    <h2 style="color:#EAAA00;border-bottom:2px solid rgba(234,170,0,0.3);padding-bottom:12px;margin-bottom:18px;">
+      📡 Live Courier Dispatch Broadcast <span style="font-size:0.7rem;font-weight:400;color:rgba(255,255,255,0.6);">(AngularJS Two-Way Binding)</span>
+    </h2>
+    <div class="form-group">
+      <label style="color:rgba(255,255,255,0.75);font-size:0.8rem;font-weight:600;">Broadcast Message</label>
+      <input ng-model="note" placeholder="Type a courier dispatch message…"
+        style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#fff;padding:10px 14px;border-radius:8px;font-size:0.9rem;width:100%;font-family:inherit;outline:none;">
+    </div>
+    <p class="chars-left" style="margin:6px 0;">
+      Characters remaining: <strong ng-bind="charsLeft()" ng-style="{color: charsLeft() < 20 ? '#f87171' : '#86efac'}"></strong>
+    </p>
+    <div class="memo-btns">
+      <button class="memo-btn" ng-repeat="p in presets" ng-click="applyPreset(p)">Memo {{$index+1}}</button>
+      <button class="memo-btn" ng-click="clearNote()" style="border-color:rgba(220,38,38,0.5);color:#fca5a5;">Clear</button>
+    </div>
+    <div class="dispatch-preview">
+      <strong ng-bind="note || '— No message entered —'"></strong>
+    </div>
+    <div class="form-group" style="margin-top:14px;">
+      <label style="color:rgba(255,255,255,0.75);font-size:0.8rem;font-weight:600;">Route Filter</label>
+      <select ng-model="view" style="background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.2);color:#fff;padding:8px 12px;border-radius:8px;font-size:0.88rem;font-family:inherit;">
+        <option value="all">All Delivery Zones</option>
+        <option value="active">Active Priority Routes</option>
+      </select>
+    </div>
+    <p style="margin-top:8px;font-size:0.82rem;color:rgba(255,255,255,0.6);" ng-bind="view === 'active' ? '🔴 Filtered: Active Priority Routes Only' : '🟢 Showing: All Campus Delivery Zones'"></p>
+  </div>
+
+</div>
+
+<footer>
+  <strong>MNSU CampusEco</strong> &nbsp;|&nbsp; Central Hub Portal &nbsp;|&nbsp; CIS 483 / CIS 583 &nbsp;|&nbsp; Minnesota State University, Mankato
+</footer>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script src="live-dispatch.js"></script>
+<script src="app.js"></script>
+<script>
+  // Live clock
+  function updateClock() {
+    document.getElementById('live-clock').textContent = new Date().toLocaleTimeString();
+  }
+  setInterval(updateClock, 1000); updateClock();
+
+  // Toast helper
+  window.showToast = function(msg, type='success') {
+    const t = document.createElement('div');
+    t.className = 'toast ' + type;
+    t.innerHTML = (type==='success'?'✅':type==='error'?'❌':'⚠️') + ' ' + msg;
+    document.getElementById('toast-container').appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+  };
+</script>
+</body>
+</html>

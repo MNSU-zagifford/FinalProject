@@ -1,91 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>MNSU CampusEco</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MNSU CampusEco | Smart Campus Logistics</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <header class="main-header">
-        <h1>MNSU CampusEco</h1>
-        <p>Smart Campus Logistics System</p>
-    </header>
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="logo-icon">C</div>
+    <div>
+      <h1>CampusEco</h1>
+      <span>Minnesota State University, Mankato</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="live-dot"></span> SYSTEM ONLINE
+    <span id="live-clock">--:--:--</span>
+  </div>
+</header>
 
-    <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="central-hub.html">Central Hub</a>
-        <a href="campus-eco.html">Eco-Transit Crew</a>
-        <a href="campus-endusers.html">Package Tracking</a>
-    </nav>
+<nav class="navbar">
+  <a href="index.html" aria-current="page">🏠 Home</a>
+  <a href="central-hub.html">🏭 Central Hub</a>
+  <a href="campus-eco.html">🛺 Eco-Transit</a>
+  <a href="campus-endusers.html">📦 Package Tracking</a>
+</nav>
 
-    <main>
+<div class="page-wrapper">
 
-        <section class="hero">
-            <h2>Smarter Deliveries. Greener Campus.</h2>
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-badge">🌿 CIS 483 / CIS 583 — Phase 3</div>
+      <h2>Smart Campus Logistics<br>Powered by Electric Carts</h2>
+      <p>CampusEco replaces diesel delivery trucks on MNSU's campus with zero-emission electric carts managed through a live full-stack web platform.</p>
+      <div style="margin-top:24px; display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="central-hub.html" class="btn btn-gold">🏭 Hub Portal</a>
+        <a href="campus-eco.html" class="btn btn-ghost" style="background:rgba(255,255,255,0.15);color:#fff;">🛺 Driver Portal</a>
+        <a href="campus-endusers.html" class="btn btn-ghost" style="background:rgba(255,255,255,0.15);color:#fff;">📦 Track Package</a>
+      </div>
+    </div>
+  </div>
 
-            <p>
-                MNSU CampusEco coordinates sustainable package deliveries
-                across campus using low-emission electric vehicles and
-                student delivery teams.
-            </p>
-        </section>
+  <!-- PORTALS -->
+  <div>
+    <p class="page-title" style="margin-bottom:16px;">System Portals</p>
+    <div class="portal-grid">
+      <a href="central-hub.html" class="portal-card">
+        <div class="portal-icon">🏭</div>
+        <h3>Central Hub Operator</h3>
+        <p>Log incoming packages, set priorities, update statuses, and dispatch couriers from one live dashboard.</p>
+        <div class="arrow">→</div>
+      </a>
+      <a href="campus-eco.html" class="portal-card">
+        <div class="portal-icon">🛺</div>
+        <h3>Eco-Transit Driver</h3>
+        <p>View your delivery queue, claim packages, monitor EcoCart battery level and GPS telemetry in real time.</p>
+        <div class="arrow">→</div>
+      </a>
+      <a href="campus-endusers.html" class="portal-card">
+        <div class="portal-icon">📦</div>
+        <h3>Student Package Tracking</h3>
+        <p>Track any campus package through 4 live stages: Received → Loaded → En Route → Delivered.</p>
+        <div class="arrow">→</div>
+      </a>
+    </div>
+  </div>
 
-        <section class="portal-container">
+  <!-- TECH STACK -->
+  <div class="card">
+    <h2><span class="card-icon">⚙️</span> Technology Stack</h2>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Frontend</div>
+        <div class="kpi-value" style="font-size:1rem;font-weight:700;">AngularJS</div>
+        <div class="kpi-sub">Two-way data binding, ng-model, live dispatch</div>
+      </div>
+      <div class="kpi-card gold">
+        <div class="kpi-label">Backend</div>
+        <div class="kpi-value" style="font-size:1rem;font-weight:700;">Node.js</div>
+        <div class="kpi-sub">Zero-dep HTTP server, /api/state, /api/telemetry</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Server Layer</div>
+        <div class="kpi-value" style="font-size:1rem;font-weight:700;">PHP + PDO</div>
+        <div class="kpi-sub">Prepared statements, GET/POST/PUT endpoints</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Database</div>
+        <div class="kpi-value" style="font-size:1rem;font-weight:700;">MySQL</div>
+        <div class="kpi-sub">packages + vehicles tables, relational schema</div>
+      </div>
+    </div>
+  </div>
 
-            <div class="portal-card">
-                <h3>Central Hub Personnel</h3>
-                <p>
-                    Register incoming packages and prepare them
-                    for campus delivery.
-                </p>
+  <!-- TEAM -->
+  <div class="card">
+    <h2><span class="card-icon">👥</span> Development Team — Equal 25% Contributions</h2>
+    <div class="kpi-grid">
+      <div class="kpi-card" style="border-left:4px solid #512888;">
+        <div class="kpi-label">Pratik Niroula — 25%</div>
+        <div class="kpi-sub" style="margin-top:4px;">Full-Stack Integration, Node.js Server, Telemetry API</div>
+      </div>
+      <div class="kpi-card" style="border-left:4px solid #EAAA00;">
+        <div class="kpi-label">Zachary Gifford — 25%</div>
+        <div class="kpi-sub" style="margin-top:4px;">GitHub Lead, OOP Models, Branch & Routing</div>
+      </div>
+      <div class="kpi-card" style="border-left:4px solid #16a34a;">
+        <div class="kpi-label">Yeabsra Tetemke — 25%</div>
+        <div class="kpi-sub" style="margin-top:4px;">UI/UX Design, CSS Grid, Tracking Portal</div>
+      </div>
+      <div class="kpi-card" style="border-left:4px solid #2563eb;">
+        <div class="kpi-label">Kirubel Dula — 25%</div>
+        <div class="kpi-sub" style="margin-top:4px;">Database Schema, Driver Workflow, FAQ Module</div>
+      </div>
+    </div>
+  </div>
 
-                <a class="button-link" href="central-hub.html">
-                    Open Hub Portal
-                </a>
-            </div>
+</div>
 
-            <div class="portal-card">
-                <h3>Eco-Transit Crew</h3>
-                <p>
-                    View delivery routes, package assignments,
-                    and vehicle information.
-                </p>
+<footer>
+  <strong>MNSU CampusEco</strong> &nbsp;|&nbsp; CIS 483 / CIS 583 Web Server Development &nbsp;|&nbsp; Dr. Suboh Alkhushayni &nbsp;|&nbsp; Minnesota State University, Mankato
+</footer>
 
-                <a class="button-link" href="campus-eco.html">
-                    Open Driver Portal
-                </a>
-            </div>
-
-            <div class="portal-card">
-                <h3>Students, Faculty & Staff</h3>
-                <p>
-                    Track packages, view delivery status,
-                    and manage delivery preferences.
-                </p>
-
-                <a class="button-link" href="campus-endusers.html">
-                    Track Package
-                </a>
-            </div>
-
-        </section>
-
-    </main>
-
-    <footer>
-        <p>
-            MNSU CampusEco | Minnesota State University, Mankato
-        </p>
-    </footer>
-
-    <!-- Phase 2: jQuery Library & Client-Side Application Script -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="app.js"></script>
-
+<script>
+  function updateClock() {
+    document.getElementById('live-clock').textContent = new Date().toLocaleTimeString();
+  }
+  setInterval(updateClock, 1000); updateClock();
+</script>
 </body>
 </html>

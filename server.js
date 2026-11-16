@@ -16,7 +16,8 @@ let packages = [
   { tracking: "PKG10234", destination: "Julia Sears Residence", size: "Medium", weight: 4.5, priority: "Normal", status: "Loaded" },
   { tracking: "PKG39281", destination: "Centennial Student Union", size: "Small", weight: 1.2, priority: "Urgent", status: "En Route" },
   { tracking: "PKG57321", destination: "Memorial Library", size: "Large", weight: 12.0, priority: "Normal", status: "Received" },
-  { tracking: "PKG84920", destination: "Armstrong Hall", size: "Medium", weight: 3.8, priority: "Normal", status: "Delivered" }
+  { tracking: "PKG84920", destination: "Armstrong Hall", size: "Medium", weight: 3.8, priority: "Normal", status: "Delivered" },
+  { tracking: "PKG12345", destination: "Preska Residence Hall", size: "Small", weight: 2.0, priority: "Normal", status: "Received" }
 ];
 
 let cart = {

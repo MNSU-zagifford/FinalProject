@@ -37,7 +37,8 @@ const CampusEco = (() => {
     new Package("PKG10234", "Julia Sears Residence", "Medium", 4.5, "Normal", "Loaded"),
     new Package("PKG39281", "Centennial Student Union", "Small", 1.2, "Urgent", "En Route"),
     new Package("PKG57321", "Memorial Library", "Large", 12.0, "Normal", "Received"),
-    new Package("PKG84920", "Armstrong Hall", "Medium", 3.8, "Normal", "Delivered")
+    new Package("PKG84920", "Armstrong Hall", "Medium", 3.8, "Normal", "Delivered"),
+    new Package("PKG12345", "Preska Residence Hall", "Small", 2.0, "Normal", "Received")
   ];
 
   const defaultVehicle = new Vehicle("cart04", "EcoCart 04", 82, "On Delivery");
@@ -61,9 +62,8 @@ const CampusEco = (() => {
   // Display status or error notifications in the UI
   const message = (area, text, error = false) => {
     const el = $("#" + area + "-message");
-    if (!el.length) return;
-    el.text(text).toggleClass("error", error).show();
-    setTimeout(() => el.fadeOut(600), 3500);
+    if (el.length) { el.text(text).toggleClass("error", error).show(); setTimeout(() => el.fadeOut(600), 3500); }
+    if (window.showToast) showToast(text, error ? "error" : "success");
   };
 
   // Helper for JSON request payloads
@@ -121,6 +121,15 @@ const CampusEco = (() => {
   // ------------------------------------------------------
   // 1. Central Hub View
   // ------------------------------------------------------
+
+  function badgeStatus(s) {
+    const map = { 'Received':'badge-received','Loaded':'badge-loaded','En Route':'badge-enroute','Delivered':'badge-delivered' };
+    return '<span class="badge ' + (map[s]||'badge-normal') + '">' + s + '</span>';
+  }
+  function badgePriority(p) {
+    return '<span class="badge ' + (p==='Urgent'?'badge-urgent':'badge-normal') + '">' + p + '</span>';
+  }
+
   function renderHub() {
     if (!$("#hub-rows").length) return;
 
@@ -128,6 +137,7 @@ const CampusEco = (() => {
     $("#total-packages").text(state.packages.length);
     $("#transit-packages").text(state.packages.filter(p => p.status === "Loaded" || p.status === "En Route").length);
     $("#delivered-packages").text(state.packages.filter(p => p.status === "Delivered").length);
+    $("#pending-packages").text(state.packages.filter(p => p.status === "Received").length);
 
     // 2. Filter rows using the search box
     const term = ($("#package-search").val() || "").toLowerCase();
@@ -137,14 +147,16 @@ const CampusEco = (() => {
 
     // 3. Render the table rows
     if (filtered.length === 0) {
-      $("#hub-rows").html('<tr><td colspan="5" style="text-align:center;">No packages found</td></tr>');
+      $("#hub-rows").html('<tr><td colspan="7" class="empty-state">No packages match your search</td></tr>');
     } else {
       $("#hub-rows").html(filtered.map(p => `
         <tr>
           <td><strong>${escapeHtml(p.tracking)}</strong></td>
           <td>${escapeHtml(p.destination)}</td>
-          <td>${escapeHtml(p.priority)}</td>
-          <td><span class="status-tag">${escapeHtml(p.status)}</span></td>
+          <td>${escapeHtml(p.size||"Medium")}</td>
+          <td>${p.weight||"—"} lbs</td>
+          <td>${badgePriority(p.priority)}</td>
+          <td>${badgeStatus(p.status)}</td>
           <td>
             <select class="status-select" data-tracking="${escapeHtml(p.tracking)}">
               ${statuses.map(st => `<option ${st === p.status ? "selected" : ""} value="${st}">${st}</option>`).join("")}
@@ -156,9 +168,16 @@ const CampusEco = (() => {
 
     // 4. Update the recent events list
     if ($("#event-list").length) {
-      $("#event-list").html(state.events.slice(0, 6).map(e => `
-        <li>${escapeHtml(e.kind)}: ${escapeHtml(e.tracking || "Vehicle")} (${escapeHtml(e.detail)})</li>
-      `).join("") || "<li>No events recorded yet</li>");
+      const icons = { Status:"🔄", Registration:"📥", Delivery:"✅" };
+      $("#event-list").html(state.events.slice(0, 8).map(e => `
+        <li>
+          <div class="event-dot ${e.kind==="Registration"?"gold":e.kind==="Delivery"?"green":""}"></div>
+          <div>
+            <div>${icons[e.kind]||"📡"} <strong>${escapeHtml(e.tracking||"Vehicle")}</strong> — ${escapeHtml(e.detail)}</div>
+            <div class="event-time">${new Date(e.at).toLocaleTimeString()}</div>
+          </div>
+        </li>
+      `).join("") || "<li><div class="event-dot"></div><div>No events yet</div></li>");
     }
   }
 
@@ -173,6 +192,9 @@ const CampusEco = (() => {
 
     // 1. Update vehicle cards
     $("#battery-display, #driver-battery-display").text((cart.battery ?? 82) + "%");
+    const bPct = cart.battery ?? 82;
+    $("#battery-bar").css("width", bPct + "%").removeClass("warn crit").addClass(bPct < 20 ? "crit" : bPct < 40 ? "warn" : "");
+    $("#battery-status-text").text(bPct < 20 ? "⚠️ Low — return to hub!" : bPct < 40 ? "Moderate — plan recharge" : "Vehicle ready for delivery");
     $("#assigned-vehicle, #driver-vehicle-name").text(cart.name || "EcoCart 04");
 
     const activeList = state.packages.filter(p => p.status !== "Delivered");
@@ -186,11 +208,9 @@ const CampusEco = (() => {
         <tr>
           <td><strong>${escapeHtml(p.tracking)}</strong></td>
           <td>${escapeHtml(p.destination)}</td>
-          <td>${escapeHtml(p.priority)}</td>
-          <td>
-            ${escapeHtml(p.status)}
-            <button class="advance-package small-button" data-tracking="${escapeHtml(p.tracking)}">Next Step</button>
-          </td>
+          <td>${badgePriority(p.priority)}</td>
+          <td>${badgeStatus(p.status)}</td>
+          <td><button class="btn btn-ghost btn-sm advance-package" data-tracking="${escapeHtml(p.tracking)}">▶ Advance</button></td>
         </tr>
       `).join(""));
     }
@@ -201,19 +221,10 @@ const CampusEco = (() => {
   // ------------------------------------------------------
   function showTracking(p) {
     state.selectedTracking = p.tracking;
-    const step = statuses.indexOf(p.status);
-
     $("#track-id-display").text(p.tracking);
     $("#track-dest-display").text(p.destination);
-
-    // Highlight 4 tracking steps
-    $(".tracking-step").each((i, el) => {
-      $(el).toggleClass("step-complete", i <= step);
-    });
-
-    if ($("#delivery-location").length && p.location) {
-      $("#delivery-location").val(p.location);
-    }
+    if (window.updateTrackingSteps) updateTrackingSteps(p.status);
+    if ($("#delivery-location").length && p.location) $("#delivery-location").val(p.location);
   }
 
   // ------------------------------------------------------

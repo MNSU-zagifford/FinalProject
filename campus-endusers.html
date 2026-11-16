@@ -1,263 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Package Tracking | MNSU CampusEco</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Package Tracking | MNSU CampusEco</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <header class="main-header">
-        <h1>MNSU CampusEco</h1>
-        <p>Campus Package Tracking</p>
-    </header>
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="logo-icon">C</div>
+    <div>
+      <h1>CampusEco</h1>
+      <span>Student Package Tracking</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="live-dot"></span> LIVE
+    <span id="live-clock">--:--:--</span>
+  </div>
+</header>
 
-    <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="central-hub.html">Central Hub</a>
-        <a href="campus-eco.html">Eco-Transit Crew</a>
-        <a href="campus-endusers.html">Package Tracking</a>
-    </nav>
+<nav class="navbar">
+  <a href="index.html">🏠 Home</a>
+  <a href="central-hub.html">🏭 Central Hub</a>
+  <a href="campus-eco.html">🛺 Eco-Transit</a>
+  <a href="campus-endusers.html" aria-current="page">📦 Package Tracking</a>
+</nav>
 
-    <main>
+<div class="page-wrapper">
 
-        <section class="form-card">
+  <div>
+    <p class="page-title">Track Your Package</p>
+    <p class="page-subtitle">Enter your tracking number to see real-time delivery status across MNSU campus.</p>
+  </div>
 
-            <h2>Track Your Package</h2>
+  <!-- SEARCH CARD -->
+  <div class="card">
+    <h2><span class="card-icon">🔍</span> Package Lookup</h2>
+    <form id="tracking-form">
+      <div class="form-grid">
+        <div class="form-group form-full">
+          <label for="tracking-number">Tracking Number</label>
+          <input id="tracking-number" name="tracking-number" required
+            placeholder="e.g. PKG10234, PKG12345…" autocomplete="off">
+        </div>
+      </div>
+      <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button type="submit" class="btn btn-primary">📦 Track Package</button>
+        <button type="button" class="btn btn-ghost" onclick="document.getElementById('tracking-number').value='PKG10234'">Try PKG10234</button>
+        <button type="button" class="btn btn-ghost" onclick="document.getElementById('tracking-number').value='PKG12345'">Try PKG12345</button>
+        <button type="button" class="btn btn-ghost" onclick="document.getElementById('tracking-number').value='PKG39281'">Try PKG39281</button>
+      </div>
+      <p id="recipient-message" class="notice" role="status" aria-live="polite"></p>
+    </form>
+  </div>
 
-            <p>
-                Enter your tracking number to view your
-                campus delivery information.
-            </p>
+  <!-- TRACKING RESULT -->
+  <div class="card" id="tracking-result">
+    <h2><span class="card-icon">📬</span> Delivery Status</h2>
+    <div class="tracking-info">
+      <div>
+        <span class="ti-label">Tracking Number</span>
+        <span class="ti-val" id="track-id-display">PKG10234</span>
+      </div>
+      <div>
+        <span class="ti-label">Destination</span>
+        <span class="ti-val" id="track-dest-display">Julia Sears Residence Community</span>
+      </div>
+      <div>
+        <span class="ti-label">Current Status</span>
+        <span class="ti-val" id="track-status-display">—</span>
+      </div>
+    </div>
+    <div class="tracking-steps" id="tracking-steps">
+      <div class="tracking-step" id="step-received">
+        <div class="step-circle">1</div>
+        <h4>Received</h4>
+        <p>Central Hub</p>
+      </div>
+      <div class="tracking-step" id="step-loaded">
+        <div class="step-circle">2</div>
+        <h4>Loaded</h4>
+        <p>EcoCart 04</p>
+      </div>
+      <div class="tracking-step" id="step-enroute">
+        <div class="step-circle">3</div>
+        <h4>En Route</h4>
+        <p>Campus Delivery</p>
+      </div>
+      <div class="tracking-step" id="step-delivered">
+        <div class="step-circle">4</div>
+        <h4>Delivered</h4>
+        <p>Final Destination</p>
+      </div>
+    </div>
+  </div>
 
-            <form id="tracking-form">
+  <!-- PREFERENCES -->
+  <div class="card">
+    <h2><span class="card-icon">⚙️</span> Delivery Preferences</h2>
+    <form id="preferences-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="delivery-location">Preferred Drop-off Location</label>
+          <select id="delivery-location" name="delivery-location" required>
+            <option value="">— Select Location —</option>
+            <option value="residence">Residence Hall Desk</option>
+            <option value="locker">Smart Campus Locker (CSU)</option>
+            <option value="department">Department Office</option>
+          </select>
+        </div>
+        <div class="form-group" style="justify-content:flex-end; gap:14px;">
+          <label class="checkbox-label">
+            <input type="checkbox" name="email-notifications"> Email Notifications
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" name="delivery-notifications"> Notify on Delivery
+          </label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="margin-top:16px;">💾 Save Preferences</button>
+      <p id="pref-message" class="notice" style="display:none;"></p>
+    </form>
+  </div>
 
-                <label for="tracking-number">
-                    Tracking Number
-                </label>
+  <!-- ECO IMPACT -->
+  <div class="card">
+    <h2><span class="card-icon">🌿</span> Your Environmental Impact</h2>
+    <div class="kpi-grid">
+      <div class="kpi-card green">
+        <div class="kpi-label">🌱 CO₂ Saved</div>
+        <div class="kpi-value">2.4</div>
+        <div class="kpi-sub">lbs vs diesel delivery</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">⚡ Electric Miles</div>
+        <div class="kpi-value">3.2</div>
+        <div class="kpi-sub">zero-emission transport</div>
+      </div>
+      <div class="kpi-card gold">
+        <div class="kpi-label">📦 Eco Deliveries</div>
+        <div class="kpi-value">8</div>
+        <div class="kpi-sub">your total CampusEco orders</div>
+      </div>
+    </div>
+  </div>
 
-                <input
-                    type="text"
-                    id="tracking-number"
-                    name="tracking-number"
-                    pattern="[A-Za-z0-9]{8,20}"
-                    required
-                >
-
-                <button type="submit">
-                    Track Package
-                </button>
-
-                <p id="recipient-message" class="notice" role="status" aria-live="polite"></p>
-
-            </form>
-
-        </section>
-
-
-        <section class="tracking-card" id="tracking-result">
-
-            <h2>Package Status</h2>
-
-            <p>
-                <strong>Tracking:</strong>
-                <span id="track-id-display">PKG10234</span>
-            </p>
-
-            <p>
-                <strong>Destination:</strong>
-                <span id="track-dest-display">Julia Sears Residence Community</span>
-            </p>
-
-            <div class="tracking-steps">
-
-                <div class="tracking-step">
-                    <span>1</span>
-                    <h4>Received</h4>
-                    <p>Central Hub</p>
-                </div>
-
-                <div class="tracking-step">
-                    <span>2</span>
-                    <h4>Loaded</h4>
-                    <p>EcoCart 04</p>
-                </div>
-
-                <div class="tracking-step">
-                    <span>3</span>
-                    <h4>En Route</h4>
-                    <p>Campus Delivery</p>
-                </div>
-
-                <div class="tracking-step">
-                    <span>4</span>
-                    <h4>Delivered</h4>
-                    <p>Final Destination</p>
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <section class="form-card preference-card">
-
-            <h2>Delivery Preferences</h2>
-
-            <form id="preferences-form">
-
-                <label for="delivery-location">
-                    Preferred Delivery Location
-                </label>
-
-                <select
-                    id="delivery-location"
-                    name="delivery-location"
-                    required
-                >
-
-                    <option value="">
-                        Select Location
-                    </option>
-
-                    <option value="residence">
-                        Residence Hall
-                    </option>
-
-                    <option value="locker">
-                        Campus Locker
-                    </option>
-
-                    <option value="department">
-                        Department Office
-                    </option>
-
-                </select>
-
-
-                <label class="checkbox-label">
-
-                    <input
-                        type="checkbox"
-                        name="email-notifications"
-                    >
-
-                    Receive Email Notifications
-
-                </label>
-
-
-                <label class="checkbox-label">
-
-                    <input
-                        type="checkbox"
-                        name="delivery-notifications"
-                    >
-
-                    Notify Me When Delivered
-
-                </label>
-
-
-                <button type="submit">
-                    Save Preferences
-                </button>
-
-                <p id="pref-message" class="notice" style="display:none;"></p>
-
-            </form>
-
-        </section>
-
-
-        <section class="eco-section">
-
-            <h2>Your Environmental Impact</h2>
-
-            <div class="dashboard-grid">
-
-                <div class="dashboard-card">
-                    <h3>CO₂ Saved</h3>
-                    <p class="big-number">2.4 lbs</p>
-                    <p>Compared with individual delivery</p>
-                </div>
-
-                <div class="dashboard-card">
-                    <h3>Electric Delivery</h3>
-                    <p class="big-number">3.2 mi</p>
-                    <p>Low-emission transportation</p>
-                </div>
-
-                <div class="dashboard-card">
-                    <h3>Eco Deliveries</h3>
-                    <p class="big-number">8</p>
-                    <p>Your total CampusEco deliveries</p>
-                </div>
-
-            </div>
-
-        </section>
-
-<!-- I have added Student Package Tracking FAQ - Kirubel Dula -->
-<section class="form-card" aria-labelledby="faq-title">
-    <h2 id="faq-title">Frequently Asked Questions</h2>
-
+  <!-- FAQ -->
+  <div class="card">
+    <h2><span class="card-icon">❓</span> Frequently Asked Questions</h2>
     <details>
-        <summary>How do I track my package?</summary>
-        <p>
-            Enter your tracking number in the tracking
-            form and click "Track Package" to view
-            the latest available delivery status.
-        </p>
+      <summary>How do I track my package?</summary>
+      <p>Enter your tracking number (e.g. PKG10234) in the lookup form above and click "Track Package" to see your real-time delivery status.</p>
     </details>
-
     <details>
-        <summary>What do the delivery statuses mean?</summary>
-        <p>
-            Received: Your package has arrived at the hub.
-            Loaded: Your package has been loaded for delivery.
-            En Route: Your package is on its way.
-            Delivered: Your package has reached its destination.
-        </p>
+      <summary>What do the delivery statuses mean?</summary>
+      <p><strong>Received</strong> — Package arrived at the Ellis Hub. <strong>Loaded</strong> — Placed on an EcoCart. <strong>En Route</strong> — Cart is driving to your building. <strong>Delivered</strong> — Package left at your location.</p>
     </details>
-
     <details>
-        <summary>Can I change my delivery preferences?</summary>
-        <p>
-            Use the Delivery Preferences section to
-            choose a preferred delivery location.
-            Saving changes requires a working connection
-            to the CampusEco server.
-        </p>
+      <summary>Can I change my delivery preferences?</summary>
+      <p>Yes — use the Delivery Preferences section above to pick a drop-off location and enable notifications at any time.</p>
     </details>
-
     <details>
-        <summary>What if my tracking number is not found?</summary>
-        <p>
-            Check that you entered the correct tracking
-            number. If the problem continues, contact
-            your campus delivery support team.
-        </p>
+      <summary>What if my tracking number is not found?</summary>
+      <p>Double-check the number format (e.g. PKG10234). If the issue continues, contact your campus delivery team at the Central Hub.</p>
     </details>
-</section>
+  </div>
 
-    </main>
+</div>
 
+<footer>
+  <strong>MNSU CampusEco</strong> &nbsp;|&nbsp; Student Package Tracking &nbsp;|&nbsp; CIS 483 / CIS 583
+</footer>
 
-    <footer>
-        <p>
-            MNSU CampusEco | Package Tracking
-        </p>
-    </footer>
+<div id="toast-container"></div>
 
-    <!-- Phase 2: jQuery Library & Client-Side Application Script -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="app.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="app.js"></script>
+<script>
+  function updateClock() {
+    document.getElementById('live-clock').textContent = new Date().toLocaleTimeString();
+  }
+  setInterval(updateClock, 1000); updateClock();
 
+  window.showToast = function(msg, type='success') {
+    const t = document.createElement('div');
+    t.className = 'toast ' + type;
+    t.innerHTML = (type==='success'?'✅':type==='error'?'❌':'⚠️') + ' ' + msg;
+    document.getElementById('toast-container').appendChild(t);
+    setTimeout(() => t.remove(), 3500);
+  };
+
+  // Update tracking step visuals when showTracking is called
+  window.updateTrackingSteps = function(status) {
+    const steps = ['Received','Loaded','En Route','Delivered'];
+    const ids   = ['step-received','step-loaded','step-enroute','step-delivered'];
+    const idx   = steps.indexOf(status);
+    ids.forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.classList.remove('done','active');
+      if (i < idx) el.classList.add('done');
+      else if (i === idx) el.classList.add('active');
+    });
+    document.getElementById('track-status-display').textContent = status || '—';
+  };
+</script>
 </body>
 </html>
