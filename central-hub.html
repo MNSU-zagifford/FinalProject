@@ -83,17 +83,25 @@
 
             </p>
             <section class="form-card angular-panel" ng-app="campusEcoLive" ng-controller="LiveController">
-                <h2>Live Dispatch Notes</h2>
-                <label for="dispatch-note">Dispatch note</label>
+                <h2>Live Courier Dispatch Broadcast (AngularJS)</h2>
+                <label for="dispatch-note">Courier Broadcast Message (Two-Way Binding)</label>
                 <input id="dispatch-note" ng-model="note" placeholder="Enter dispatch note">
-                <p>Live preview: <strong ng-bind="note || 'No note entered'"></strong>
+                <p style="font-size: 0.85rem; color: #62576F; margin: 4px 0;">
+                    Characters remaining: <strong ng-bind="charsLeft()" ng-style="{color: charsLeft() < 20 ? '#d9534f' : '#22c55e'}"></strong>
                 </p>
-                <label for="dispatch-filter">Display preference</label>
+                <p>Live Preview: <strong style="color: #512888;" ng-bind="note || 'No broadcast note entered'"></strong></p>
+                <div style="margin: 10px 0; display: flex; flex-wrap: wrap; gap: 6px;">
+                    <button type="button" class="btn" style="padding: 4px 10px; font-size: 0.8rem;" ng-repeat="p in presets" ng-click="applyPreset(p)">
+                        Memo {{$index + 1}}
+                    </button>
+                    <button type="button" class="btn" style="padding: 4px 10px; font-size: 0.8rem; background: #62576F;" ng-click="clearNote()">Clear</button>
+                </div>
+                <label for="dispatch-filter">Display Route Preference</label>
                 <select id="dispatch-filter" ng-model="view">
-                    <option value="all">All deliveries</option>
-                    <option value="active">Active deliveries</option>
+                    <option value="all">All Delivery Zones</option>
+                    <option value="active">Active Priority Routes</option>
                 </select>
-                <p ng-bind="view === 'active' ? 'Showing active delivery preference' : 'Showing all delivery preference'"></p>
+                <p ng-bind="view === 'active' ? 'Filtered: Active Priority Routes Only' : 'Filtered: All Campus Delivery Zones'"></p>
             </section>
         </main>
         <footer>

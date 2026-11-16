@@ -35,7 +35,10 @@ const mimeTypes = {
   ".css": "text/css",
   ".js": "application/javascript",
   ".json": "application/json",
-  ".png": "image/png"
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".svg": "image/svg+xml"
 };
 
 // Create local server
@@ -54,6 +57,21 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // --- API 0: Unified System State Endpoint (Prevents 404s in app.js) ---
+  if (pathname === "/api/state") {
+    res.writeHead(200, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({
+      status: "success",
+      packages,
+      vehicles: [cart],
+      events: [
+        { id: 1, packageId: "PKG10234", text: "Checked in at Perimeter Hub", time: "08:30 AM" },
+        { id: 2, packageId: "PKG10234", text: "Loaded onto EcoCart 04", time: "09:15 AM" }
+      ]
+    }));
+    return;
+  }
+
   // --- API 1: Packages Endpoint ---
   if (pathname === "/api/packages") {
     if (req.method === "GET") {
@@ -68,13 +86,21 @@ const server = http.createServer((req, res) => {
       req.on("end", () => {
         try {
           const newPkg = JSON.parse(body);
+          if (!newPkg.tracking || !newPkg.destination) {
+            res.writeHead(400, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "Missing required fields: tracking and destination" }));
+            return;
+          }
+          newPkg.status = newPkg.status || "Received";
+          newPkg.priority = newPkg.priority || "Normal";
+          newPkg.weight = parseFloat(newPkg.weight) || 1.0;
           packages.unshift(newPkg);
-          console.log(`[Server] New package added: ${newPkg.tracking}`);
+          console.log(`[Server] New package added: ${newPkg.tracking} -> ${newPkg.destination}`);
           res.writeHead(201, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ status: "success", package: newPkg }));
         } catch (err) {
           res.writeHead(400, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ error: "Invalid JSON" }));
+          res.end(JSON.stringify({ error: "Invalid JSON format" }));
         }
       });
       return;
@@ -113,8 +139,16 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // --- Static File Server ---
-  let filePath = path.join(PUBLIC_DIR, pathname === "/" ? "index.html" : pathname);
+  // --- Static File Server with Path Traversal Protection ---
+  const safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, "");
+  let filePath = path.join(PUBLIC_DIR, safePath === "/" ? "index.html" : safePath);
+
+  // Security Check: Verify filePath stays inside PUBLIC_DIR
+  if (!filePath.startsWith(PUBLIC_DIR)) {
+    res.writeHead(403, { "Content-Type": "text/plain" });
+    res.end("403 Forbidden: Directory traversal blocked");
+    return;
+  }
 
   fs.readFile(filePath, (err, content) => {
     if (err) {
