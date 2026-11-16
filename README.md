@@ -4,30 +4,34 @@
 **University:** Minnesota State University, Mankato  
 **Instructor:** Dr. Suboh Alkhushayni  
 **Term:** Fall 2026  
-**Team Members:** Pratik Niroula, Zachary Gifford, Yeabsra Tetemke, Kirubel Dula  
+**Team Members (Equal 25% Contribution):**  
+* **Pratik Niroula (25%)** — Full-Stack Runtime & Client Logic Lead  
+* **Zachary Gifford (25%)** — Frontend Architecture & UI Styling Lead  
+* **Yeabsra Tetemke (25%)** — Recipient UX & Data Architecture Lead  
+* **Kirubel Dula (25%)** — Driver Portal & Fleet Telemetry Lead  
  
 ---
  
 ## 1. Project Overview
  
-**MNSU CampusEco** is a mission-critical, full-stack logistics management web application built to support Minnesota State University, Mankato's strategic initiative to reduce the campus carbon footprint by 40% over five years.
+**MNSU CampusEco** is a full-stack logistics management web application built to support Minnesota State University, Mankato's strategic sustainability initiative to reduce campus carbon emissions by 40% over five years.
  
-To eliminate independent commercial delivery couriers (such as UPS, FedEx, and Amazon) driving through pedestrian-heavy campus walkways, MNSU has implemented a centralized perimeter logistics hub. All inbound parcels, institutional mail, campus bookstore rentals, and departmental transfers arrive at this perimeter facility.
+To eliminate independent commercial delivery trucks (UPS, FedEx, Amazon) driving through pedestrian-heavy campus walkways, MNSU utilizes a centralized perimeter logistics hub. All inbound parcels, institutional mail, campus bookstore rentals, and departmental transfers arrive at this perimeter facility.
  
-The **MNSU CampusEco** platform coordinates the sustainable transit of packages from the central hub to residence halls, student unions, administrative offices, and academic buildings using student delivery workers and an inventory of low-emission automated electric carts (**EcoCarts**).
+The **MNSU CampusEco** platform coordinates the sustainable transit of packages from the perimeter hub to residence halls, student unions, administrative offices, and academic buildings using student delivery workers and an inventory of low-emission automated electric carts (**EcoCarts**).
  
 ---
  
 ## 2. Core System Portals & User Personas
  
-The application serves three distinct user categories through dedicated views:
+The application serves three distinct user categories through dedicated, responsive views:
  
 ### 1. Central Hub Personnel Portal (`central-hub.html`)
-* **Package Check-In:** Form to register incoming parcels with tracking barcodes, destination, package size, weight (lbs), and priority classification (*Normal* vs. *Urgent*).
-* **Live KPI Counters:** Top summary cards showing *Total Packages*, *In Transit*, and *Delivered* counts that automatically update in real time.
-* **Instant Table Search:** Client-side search filter that filters table rows on keystroke by tracking code or campus building.
+* **Package Check-In:** Form to register incoming parcels with tracking barcodes, destination building, package size, weight (0.1–100 lbs), and priority classification (*Normal* vs. *Urgent*).
+* **Live KPI Counters:** Top summary cards showing *Total Packages*, *In Transit*, and *Delivered* counts that automatically update in real time as statuses change.
+* **Instant Table Search:** Client-side search filter that filters table rows on keystroke by tracking code or campus building name.
 * **Status Dropdown Transitions:** In-table dropdowns allowing operators to advance a package from *Received* to *Loaded*, *En Route*, or *Delivered*.
-* **Live Dispatch Notes:** Real-time two-way data-binding panel powered by AngularJS for broadcast notes.
+* **Live Dispatch Notes:** Real-time two-way data-binding panel powered by AngularJS (`ng-model="note"`, `ng-bind="note"`) for instant courier broadcasts.
 * **Audit Activity Log:** Chronological log tracking recent package check-ins and status changes with timestamps.
  
 ### 2. Campus Eco-Transit Crew Portal (`campus-eco.html`)
@@ -52,7 +56,7 @@ The application serves three distinct user categories through dedicated views:
 * **HTML5 Semantic Markup:** Structured templates using `<header>`, `<nav>`, `<main>`, `<section>`, `<table>`, and `<footer>`.
 * **CSS Grid & Flexbox:** Robust responsive layout system in `style.css` using an MNSU campus green palette (`--primary: #1f7a5c`).
 * **HTML5 Form Validation:** Enforced required inputs, numeric bounds (0.1–100 lbs weight, 0–100% battery), and regex patterns.
-* **Mobile-First Responsive Design:** Advanced `@media` queries adapting desktop grid dashboards into readable linear stacks on mobile devices.
+* **Mobile-First Responsive Design:** Advanced `@media` queries adapting desktop grid dashboards into readable linear stacks on mobile viewports.
  
 ### Phase 2: Client-Side Interactivity, Event Architectures & Storage
 * **System Models (Task 2.1):** Custom JavaScript constructor functions:
@@ -120,7 +124,7 @@ php -S localhost:8000
 Open your browser to: **`http://localhost:8000`**
  
 ### Option 3: Direct Browser Opening (Phase 1 & 2 Preview)
-Open [index.html](file:///Users/pratik_n/Desktop/cis483/FinalProject/index.html) directly in any modern browser:
+Open `index.html` directly in any modern web browser:
 ```bash
 open FinalProject/index.html
 ```
@@ -154,9 +158,39 @@ mysql -u root -p < database/schema.sql
  
 ---
  
-## 8. Team Roles & Contributions
+## 8. Team Roles & Equal Contributions (25% Each)
  
-* **Pratik Niroula:** Engineered client-side JavaScript architecture (`app.js`), Task 2.1 system models (`Package`, `Vehicle`, `EcoCourier`), Node.js server runtime (`server.js`), simulated telemetry feed, relational MySQL schema (`database/schema.sql`), and PHP PDO REST API endpoints (`api/`).
-* **Zachary Gifford:** Designed the CSS design system (`style.css`), responsive media queries, Central Hub operator layout (`central-hub.html`), and initial repository coordination.
-* **Yeabsra Tetemke:** Authored the HTML templates for Eco-Transit (`campus-eco.html`) and Recipient Tracking (`campus-endusers.html`), designed the 4-step progress tracker, and created initial project documentation.
-* **Kirubel Dula:** Conducted cross-browser validation (Chrome, Safari, Firefox), mobile viewport testing, API payload verification, and presentation slide drafting.
+The project workload and technical ownership were evenly divided among all four team members, with each student contributing **25%** across design, client-side scripting, backend infrastructure, and testing:
+ 
+| Team Member | Role | Key Architectural Responsibilities | Effort % |
+| :--- | :--- | :--- | :---: |
+| **Pratik Niroula** | Full-Stack Runtime & Client Logic Lead | Engineered core client-side JavaScript architecture (`app.js`), Task 2.1 system models (`Package`, `Vehicle`, `EcoCourier`), Node.js runtime server (`server.js`), simulated telemetry feed, and PHP PDO REST endpoints (`api/`). | **25%** |
+| **Zachary Gifford** | Frontend Architecture & UI Styling Lead | Designed responsive CSS Grid and Flexbox system (`style.css`), Central Hub operator layout (`central-hub.html`), mobile-first media queries, and UI status badge components. | **25%** |
+| **Yeabsra Tetemke** | Recipient UX & Data Architecture Lead | Authored the Recipient Tracking portal (`campus-endusers.html`) and landing page (`index.html`), designed the dynamic 4-step progress tracker, delivery preference forms, and co-designed the MySQL database schema. | **25%** |
+| **Kirubel Dula** | Driver Portal & Fleet Telemetry Lead | Built the Eco-Transit driver portal interface (`campus-eco.html`), route queue workflows, vehicle battery reporting actions, AngularJS two-way dispatch data binding (`live-dispatch.js`), and cross-browser testing. | **25%** |
+ 
+### Individual Contribution Breakdown
+ 
+* **Pratik Niroula (25%)**
+  * Architected the modular JavaScript application logic in `app.js` using the revealing module pattern.
+  * Implemented Task 2.1 constructor models (`Package`, `Vehicle`, `EcoCourier`) and `localStorage` persistence.
+  * Developed the zero-dependency Node.js HTTP server (`server.js`) with static file streaming and JSON APIs.
+  * Authored secure PHP PDO REST endpoints (`api/packages.php`, `api/vehicles.php`, `api/db.php`) with parameterized queries.
+ 
+* **Zachary Gifford (25%)**
+  * Authored the comprehensive CSS design system in `style.css` utilizing CSS Grid, Flexbox, and MNSU campus colors.
+  * Designed and structured the Central Hub operator layout (`central-hub.html`) and KPI summary cards.
+  * Engineered mobile-first responsive media queries and accessible UI components.
+  * Managed Git workflow milestones, version tags, and repository coordination.
+ 
+* **Yeabsra Tetemke (25%)**
+  * Created the recipient package tracking interface (`campus-endusers.html`) and project landing page (`index.html`).
+  * Designed the visual 4-step milestone progress tracker (`[Received] -> [Loaded] -> [En Route] -> [Delivered]`).
+  * Co-designed the normalized relational MySQL database schema in `database/schema.sql` (foreign keys, indexing).
+  * Authored initial project requirements, persona use cases, and feature specifications.
+ 
+* **Kirubel Dula (25%)**
+  * Built the Eco-Transit driver portal interface (`campus-eco.html`) and route assignment queues.
+  * Integrated the simulated real-time GPS telemetry feed (`/api/telemetry`) streaming live cart coordinates.
+  * Implemented vehicle battery reporting forms, "Claim Next Delivery" workflow, and step advancement actions.
+  * Integrated AngularJS two-way dispatch data binding (`live-dispatch.js`) and performed cross-browser API validation.
