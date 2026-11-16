@@ -1,0 +1,22 @@
+{
+  "name": "mnsu-campuseco",
+  "version": "3.0.0",
+  "description": "Smart Campus Logistics System - CIS 483/583 Term Project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "mnsu",
+    "logistics",
+    "cis483",
+    "cis583",
+    "javascript",
+    "nodejs",
+    "angularjs",
+    "php"
+  ],
+  "author": "Pratik Niroula, Zachary Gifford, Yeabsra Tetemke, Kirubel Dula",
+  "license": "ISC"
+}
