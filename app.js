@@ -1,0 +1,37 @@
+const CampusEco = (() => {
+    const state = { packages: [], vehicles: [], events: [], selectedTracking: 'PKG10234' };
+    const statuses = ['Received', 'Loaded', 'En Route', 'Delivered'];
+    const $ = window.jQuery;
+    const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const message = (area, text, error = false) => { $('#' + area + '-message').text(text).toggleClass('error', error); };
+    async function request(url, options = {}) { const response = await fetch(url, { ...options, headers: { 'Content-Type': 'application/json', ...options.headers } }); let data = await response.json(); if (!response.ok)
+        throw Error(data.error || 'Request failed'); return data; }
+    const json = (method, body) => ({ method, body: JSON.stringify(body) });
+    async function refresh() { const data = await request('/api/state'); Object.assign(state, data); renderHub(); renderCrew(); }
+    function renderHub() { if (!$('#hub-rows').length)
+        return; $('#total-packages').text(state.packages.length); $('#transit-packages').text(state.packages.filter(p => p.status === 'Loaded' || p.status === 'En Route').length); $('#delivered-packages').text(state.packages.filter(p => p.status === 'Delivered').length); const term = ($('#package-search').val() || '').toLowerCase(); const filtered = state.packages.filter(p => (p.tracking + ' ' + p.destination).toLowerCase().includes(term)); $('#hub-rows').html(filtered.map(p => `<tr><td>${escapeHtml(p.tracking)}</td><td>${escapeHtml(p.destination)}</td><td>${escapeHtml(p.priority)}</td><td><span class="status-tag">${escapeHtml(p.status)}</span></td><td><select class="status-select" aria-label="Update ${escapeHtml(p.tracking)} status" data-tracking="${escapeHtml(p.tracking)}">${statuses.map(st => `<option ${st === p.status ? 'selected' : ''} value="${st}">${st}</option>`).join('')}</select></td></tr>`).join('') || '<tr><td colspan="5">No packages found</td></tr>'); $('#event-list').html(state.events.slice(0, 8).map(e => `<li>${escapeHtml(new Date(e.at).toLocaleString())} — ${escapeHtml(e.kind)}: ${escapeHtml(e.tracking || 'Vehicle')} (${escapeHtml(e.detail)})</li>`).join('') || '<li>No events recorded yet</li>'); }
+    function renderCrew() { if (!$('#route-rows').length)
+        return; const cart = state.vehicles.find(v => v.id === 'cart04'); $('#battery-display').text((cart?.battery ?? 0) + '%'); $('#assigned-vehicle').text(cart?.name || 'Unassigned'); $('#delivery-count').text(state.packages.filter(p => p.status !== 'Delivered').length); $('#route-rows').html(state.packages.filter(p => p.status !== 'Delivered').map(p => `<tr><td>${escapeHtml(p.tracking)}</td><td>${escapeHtml(p.destination)}</td><td>${escapeHtml(p.priority)}</td><td>${escapeHtml(p.status)} <button class="advance-package small-button" data-tracking="${escapeHtml(p.tracking)}" ${p.status === 'Delivered' ? 'disabled' : ''}>Next step</button></td></tr>`).join('') || '<tr><td colspan="4">All deliveries complete</td></tr>'); }
+    function showTracking(p) { state.selectedTracking = p.tracking; const step = statuses.indexOf(p.status); $('#tracking-result').html(`<h2>Package Status</h2><p><strong>Tracking:</strong> ${escapeHtml(p.tracking)}</p><p><strong>Destination:</strong> ${escapeHtml(p.destination)}</p><p><strong>Current status:</strong> ${escapeHtml(p.status)}</p><div class="tracking-steps">${statuses.map((st, i) => `<div class="tracking-step ${i <= step ? 'step-complete' : ''}"><span>${i + 1}</span><h4>${st}</h4><p>${i <= step ? 'Completed / current' : 'Upcoming'}</p></div>`).join('')}</div>`); $('#delivery-location').val(p.location || 'residence'); $('[name="email-notifications"]').prop('checked', !!p.emailNotifications); $('[name="delivery-notifications"]').prop('checked', !!p.deliveryNotifications); }
+    async function safe(area, fn) { try {
+        await fn();
+    }
+    catch (e) {
+        message(area, e.message, true);
+    } }
+    function init() { if (!$)
+        return; $('#register-form').on('submit', e => { e.preventDefault(); safe('hub', async () => { const f = e.currentTarget; const b = Object.fromEntries(new FormData(f)); b.weight = Number(b.weight); const pkg = await request('/api/packages', json('POST', b)); f.reset(); await refresh(); message('hub', 'Registered ' + pkg.tracking); }); }); $('#package-search').on('input', renderHub); $('#hub-rows').on('change', '.status-select', function () { const tracking = this.dataset.tracking, status = this.value; safe('hub', async () => { await request('/api/packages/' + encodeURIComponent(tracking) + '/status', json('PATCH', { status })); await refresh(); message('hub', tracking + ' updated to ' + status); }); }); $('#claim-delivery').on('click', () => safe('crew', async () => { const pkg = await request('/api/claim', json('POST', { vehicle: 'cart04' })); await refresh(); message('crew', 'Claimed ' + pkg.tracking); })); $('#route-rows').on('click', '.advance-package', function () { const id = this.dataset.tracking, p = state.packages.find(x => x.tracking === id); if (!p)
+        return; const next = statuses[statuses.indexOf(p.status) + 1]; if (!next)
+        return; safe('crew', async () => { await request('/api/packages/' + encodeURIComponent(id) + '/status', json('PATCH', { status: next })); await refresh(); message('crew', id + ' is now ' + next); }); }); $('#battery-form').on('submit', e => { e.preventDefault(); const f = e.currentTarget; safe('crew', async () => { const vehicle = f.elements.vehicle.value, battery = Number(f.elements.battery.value), status = f.elements['vehicle-status'].value; await request('/api/vehicles/' + encodeURIComponent(vehicle), json('PATCH', { battery, status })); await refresh(); message('crew', 'Battery report saved'); }); }); $('#tracking-form').on('submit', e => { e.preventDefault(); safe('recipient', async () => { const id = $('#tracking-number').val().trim().toUpperCase(); const p = await request('/api/packages/' + encodeURIComponent(id)); showTracking(p); message('recipient', 'Tracking details loaded'); }); }); $('#preferences-form').on('submit', e => { e.preventDefault(); safe('recipient', async () => { const b = { location: $('#delivery-location').val(), emailNotifications: $('[name="email-notifications"]').is(':checked'), deliveryNotifications: $('[name="delivery-notifications"]').is(':checked') }; const p = await request('/api/packages/' + encodeURIComponent(state.selectedTracking) + '/preferences', json('PATCH', b)); showTracking(p); message('recipient', 'Preferences saved for ' + p.tracking); }); }); refresh().then(() => { if ($('#tracking-result').length) {
+        const p = state.packages.find(x => x.tracking === state.selectedTracking);
+        if (p)
+            showTracking(p);
+    } }).catch(e => { ['hub', 'crew', 'recipient'].forEach(area => { if ($('#' + area + '-message').length)
+        message(area, 'Cannot connect to API: ' + e.message, true); }); }); }
+    if (window.angular) {
+        angular.module('campusEcoLive', []).controller('LiveController', ['$scope', function ($scope) { $scope.note = ''; $scope.view = 'all'; }]);
+    }
+    if ($)
+        $(init);
+    return { state, refresh, request };
+})();
