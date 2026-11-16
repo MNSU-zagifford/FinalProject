@@ -20,6 +20,24 @@ let packages = [
   { tracking: "PKG12345", destination: "Preska Residence Hall", size: "Small", weight: 2.0, priority: "Normal", status: "Received" }
 ];
 
+const DB_FILE = path.join(__dirname, "database", "packages.json");
+try {
+  if (fs.existsSync(DB_FILE)) {
+    const fileData = JSON.parse(fs.readFileSync(DB_FILE, "utf8"));
+    if (Array.isArray(fileData) && fileData.length) packages = fileData;
+  } else {
+    fs.writeFileSync(DB_FILE, JSON.stringify(packages, null, 2));
+  }
+} catch (e) {
+  console.log("Using default packages list");
+}
+
+function persistPackages() {
+  try {
+    fs.writeFileSync(DB_FILE, JSON.stringify(packages, null, 2));
+  } catch (e) {}
+}
+
 let cart = {
   id: "cart04",
   name: "EcoCart 04",
@@ -96,6 +114,7 @@ const server = http.createServer((req, res) => {
           newPkg.priority = newPkg.priority || "Normal";
           newPkg.weight = parseFloat(newPkg.weight) || 1.0;
           packages.unshift(newPkg);
+          persistPackages();
           console.log(`[Server] New package added: ${newPkg.tracking} -> ${newPkg.destination}`);
           res.writeHead(201, { "Content-Type": "application/json" });
           res.end(JSON.stringify({ status: "success", package: newPkg }));
@@ -117,6 +136,7 @@ const server = http.createServer((req, res) => {
           if (pkg) {
             if (update.status) pkg.status = update.status;
             if (update.destination) pkg.destination = update.destination;
+            persistPackages();
             console.log(`[Server] Package updated: ${pkg.tracking} -> ${pkg.status}`);
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ status: "success", package: pkg }));

@@ -135,6 +135,17 @@ const CampusEco = (() => {
     syncStorage();
     renderHub();
     renderCrew();
+    updateLiveTrackingIfActive();
+  }
+
+  function updateLiveTrackingIfActive() {
+    if (state.selectedTracking && $("#track-id-display").length) {
+      const p = state.packages.find(x => x.tracking === state.selectedTracking);
+      if (p) {
+        $("#track-dest-display").text(p.destination);
+        if (window.updateTrackingSteps) updateTrackingSteps(p.status);
+      }
+    }
   }
 
   // Safe wrapper for async actions with user feedback
@@ -405,6 +416,9 @@ const CampusEco = (() => {
         message("recipient", `Preferences saved: Priority drop-off at ${loc}`);
       });
     });
+
+    // Auto-sync heartbeat every 2.5 seconds across all browser windows and devices
+    setInterval(refresh, 2500);
   }
 
   // Register AngularJS module if loaded
