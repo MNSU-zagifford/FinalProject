@@ -177,7 +177,7 @@ const CampusEco = (() => {
             <div class="event-time">${new Date(e.at).toLocaleTimeString()}</div>
           </div>
         </li>
-      `).join("") || "<li><div class="event-dot"></div><div>No events yet</div></li>");
+      `).join("") || '<li><div class="event-dot"></div><div>No events yet</div></li>');
     }
   }
 
