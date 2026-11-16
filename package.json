@@ -1,22 +1,37 @@
+
 {
   "name": "mnsu-campuseco",
-  "version": "3.0.0",
-  "description": "Smart Campus Logistics System - CIS 483/583 Term Project",
+  "version": "3.1.0",
+  "description": "Smart Campus Logistics System for Minnesota State University, Mankato. A web-based platform designed to improve campus resource management, logistics coordination, and operational efficiency.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node --watch server.js",
+    "check": "node --check server.js"
   },
   "keywords": [
     "mnsu",
-    "logistics",
+    "smart-campus",
+    "campus-logistics",
+    "resource-management",
     "cis483",
     "cis583",
     "javascript",
     "nodejs",
     "angularjs",
-    "php"
+    "php",
+    "web-application"
   ],
   "author": "Pratik Niroula, Zachary Gifford, Yeabsra Tetemke, Kirubel Dula",
-  "license": "ISC"
+  "contributors": [
+    "Pratik Niroula",
+    "Zachary Gifford",
+    "Yeabsra Tetemke",
+    "Kirubel Dula"
+  ],
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "private": true
 }
