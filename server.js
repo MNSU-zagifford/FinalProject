@@ -106,6 +106,31 @@ const server = http.createServer((req, res) => {
       });
       return;
     }
+
+    if (req.method === "PUT") {
+      let body = "";
+      req.on("data", chunk => { body += chunk; });
+      req.on("end", () => {
+        try {
+          const update = JSON.parse(body);
+          const pkg = packages.find(p => p.tracking === update.tracking);
+          if (pkg) {
+            if (update.status) pkg.status = update.status;
+            if (update.destination) pkg.destination = update.destination;
+            console.log(`[Server] Package updated: ${pkg.tracking} -> ${pkg.status}`);
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ status: "success", package: pkg }));
+          } else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "Package not found" }));
+          }
+        } catch (err) {
+          res.writeHead(400, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid JSON format" }));
+        }
+      });
+      return;
+    }
   }
 
   // --- API 2: Vehicles Endpoint ---

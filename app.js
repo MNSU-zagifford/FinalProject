@@ -93,6 +93,32 @@ const CampusEco = (() => {
     return { status: "success" };
   }
 
+  function syncStorage() {
+    try {
+      localStorage.setItem("campuseco_packages", JSON.stringify(state.packages));
+      localStorage.setItem("campuseco_events", JSON.stringify(state.events));
+    } catch (e) {}
+  }
+
+  function loadStorage() {
+    try {
+      const saved = localStorage.getItem("campuseco_packages");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length) {
+          parsed.forEach(p => {
+            const existing = state.packages.find(x => x.tracking === p.tracking);
+            if (existing) {
+              existing.status = p.status;
+            } else {
+              state.packages.unshift(p);
+            }
+          });
+        }
+      }
+    } catch (e) {}
+  }
+
   // Refresh data and update views
   async function refresh() {
     try {
@@ -105,6 +131,8 @@ const CampusEco = (() => {
     } catch (e) {
       console.log("Using cached state:", e.message);
     }
+    loadStorage();
+    syncStorage();
     renderHub();
     renderCrew();
   }
@@ -258,6 +286,9 @@ const CampusEco = (() => {
           detail: `Destination: ${destination}`
         });
 
+        syncStorage();
+        await request("/api/packages", json("POST", newPkg));
+
         $("#register-form")[0].reset();
         renderHub();
         message("hub", `Registered ${newPkg.tracking} successfully`);
@@ -281,6 +312,8 @@ const CampusEco = (() => {
             tracking: tracking,
             detail: `Updated to ${status}`
           });
+          syncStorage();
+          await request("/api/packages", json("PUT", { tracking: item.tracking, status: item.status }));
           renderHub();
           message("hub", `${tracking} updated to ${status}`);
         }
@@ -295,6 +328,8 @@ const CampusEco = (() => {
           throw new Error("No pending packages available to claim");
         }
         nextPkg.status = "Loaded";
+        syncStorage();
+        await request("/api/packages", json("PUT", { tracking: nextPkg.tracking, status: "Loaded" }));
         renderCrew();
         message("crew", `Claimed ${nextPkg.tracking} into EcoCart`);
       });
@@ -309,6 +344,8 @@ const CampusEco = (() => {
         const nextIndex = statuses.indexOf(p.status) + 1;
         if (nextIndex < statuses.length) {
           p.status = statuses[nextIndex];
+          syncStorage();
+          await request("/api/packages", json("PUT", { tracking: p.tracking, status: p.status }));
           renderCrew();
           message("crew", `${id} is now ${p.status}`);
         }
@@ -340,6 +377,17 @@ const CampusEco = (() => {
       e.preventDefault();
       safe("recipient", async () => {
         const id = $("#tracking-number").val().trim().toUpperCase();
+        loadStorage();
+        try {
+          const fresh = await request("/api/state");
+          if (fresh && fresh.packages) {
+            fresh.packages.forEach(fp => {
+              const ex = state.packages.find(x => x.tracking === fp.tracking);
+              if (ex) ex.status = fp.status;
+              else state.packages.push(fp);
+            });
+          }
+        } catch(e) {}
         const p = state.packages.find(x => x.tracking === id);
         if (!p) {
           throw new Error(`Tracking number "${id}" not found`);
