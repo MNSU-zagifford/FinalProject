@@ -35,7 +35,7 @@
                 campus delivery information.
             </p>
 
-            <form>
+            <form id="tracking-form">
 
                 <label for="tracking-number">
                     Tracking Number
@@ -53,23 +53,25 @@
                     Track Package
                 </button>
 
+                <p id="recipient-message" class="notice" role="status" aria-live="polite"></p>
+
             </form>
 
         </section>
 
 
-        <section class="tracking-card">
+        <section class="tracking-card" id="tracking-result">
 
             <h2>Package Status</h2>
 
             <p>
                 <strong>Tracking:</strong>
-                PKG10234
+                <span id="track-id-display">PKG10234</span>
             </p>
 
             <p>
                 <strong>Destination:</strong>
-                Julia Sears Residence Community
+                <span id="track-dest-display">Julia Sears Residence Community</span>
             </p>
 
             <div class="tracking-steps">
@@ -107,7 +109,7 @@
 
             <h2>Delivery Preferences</h2>
 
-            <form>
+            <form id="preferences-form">
 
                 <label for="delivery-location">
                     Preferred Delivery Location
@@ -166,6 +168,8 @@
                     Save Preferences
                 </button>
 
+                <p id="pref-message" class="notice" style="display:none;"></p>
+
             </form>
 
         </section>
@@ -207,6 +211,10 @@
             MNSU CampusEco | Package Tracking
         </p>
     </footer>
+
+    <!-- Phase 2: jQuery Library & Client-Side Application Script -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="app.js"></script>
 
 </body>
 </html>

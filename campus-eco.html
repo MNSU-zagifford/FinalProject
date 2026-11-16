@@ -30,19 +30,19 @@
 
             <div class="dashboard-card">
                 <h3>Assigned Vehicle</h3>
-                <p class="big-number">EcoCart 04</p>
+                <p class="big-number" id="assigned-vehicle">EcoCart 04</p>
                 <p>Electric Campus Delivery Vehicle</p>
             </div>
 
             <div class="dashboard-card">
                 <h3>Battery Status</h3>
-                <p class="big-number">82%</p>
+                <p class="big-number" id="battery-display">82%</p>
                 <p>Vehicle ready for delivery</p>
             </div>
 
             <div class="dashboard-card">
                 <h3>Deliveries</h3>
-                <p class="big-number">6</p>
+                <p class="big-number" id="delivery-count">6</p>
                 <p>Packages currently assigned</p>
             </div>
 
@@ -64,36 +64,16 @@
                     </tr>
                 </thead>
 
-                <tbody>
-
-                    <tr>
-                        <td>PKG10234</td>
-                        <td>Julia Sears</td>
-                        <td>Normal</td>
-                        <td>Loaded</td>
-                    </tr>
-
-                    <tr>
-                        <td>PKG39281</td>
-                        <td>Centennial Student Union</td>
-                        <td>Urgent</td>
-                        <td>En Route</td>
-                    </tr>
-
-                    <tr>
-                        <td>PKG57321</td>
-                        <td>Memorial Library</td>
-                        <td>Normal</td>
-                        <td>Pending</td>
-                    </tr>
-
+                <tbody id="route-rows">
                 </tbody>
 
             </table>
 
-            <button type="button">
+            <button type="button" id="claim-delivery" class="button-link">
                 Claim Next Delivery
             </button>
+
+            <p id="crew-message" class="notice" role="status" aria-live="polite"></p>
 
         </section>
 
@@ -102,7 +82,7 @@
 
             <h2>Vehicle Battery Report</h2>
 
-            <form>
+            <form id="battery-form">
 
                 <label for="vehicle">
                     Vehicle
@@ -190,6 +170,10 @@
     <footer>
         <p>MNSU CampusEco | Eco-Transit Crew</p>
     </footer>
+
+    <!-- Phase 2: jQuery Library & Client-Side Application Script -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="app.js"></script>
 
 </body>
 </html>
